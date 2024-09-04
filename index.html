@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Responsiva con Imágenes como Botones</title>
+    <style>
+        /* CSS integrado */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 100vh;
+            background-image: url('img/fondo.jpg'); /* Ruta de la imagen de fondo */
+            background-size: contain;
+            background-position: center center;
+            background-repeat: no-repeat;
+        }
+
+        .logo {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .logo img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+            padding: 20px;
+        }
+
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            max-width: 180px;
+        }
+
+        .button-image {
+            width: 100%;
+            height: auto;
+            transition: transform 0.3s;
+        }
+
+        .button-image:hover {
+            transform: scale(1.05);
+        }
+
+        .loading {
+            margin-top: 20px;
+        }
+
+        .loading img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .footer {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            width: 100%;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 14px;
+            position: relative;
+            bottom: 0;
+        }
+
+        @media (max-width: 480px) {
+            .buttons {
+                gap: 10px;
+                max-width: 150px;
+            }
+
+            .footer {
+                font-size: 12px;
+            }
+
+            body {
+                background-size: cover;
+            }
+        }
+
+        /* Estilos para el botón adicional */
+        .app-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .app-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <!-- Logo de la marca -->
+    <div class="logo">
+        <img src="https://i.imgur.com/gQYREid.png" alt="Logo de la Marca">
+    </div>
+
+    <div class="container">
+        <!-- Imágenes como botones -->
+        <div class="buttons">
+            <a href="https://radiopowercolombia.blogspot.com/">
+                <img src="img/imagen1.png" alt="Enlace 1" class="button-image">
+            </a>
+            <a href="https://radiopower-urbana.blogspot.com/">
+                <img src="img/imagen2.png" alt="Enlace 2" class="button-image">
+            </a>
+            <a href="https://radiopower-salsa.blogspot.com/">
+                <img src="img/imagen3.png" alt="Enlace 3" class="button-image">
+            </a>
+            <a href="https://radiopower-web.blogspot.com/">
+                <img src="img/imagen4.png" alt="Enlace 4" class="button-image">
+            </a>
+        </div>
+
+        <!-- Botón para ejecutar la sección de la app -->
+        <button class="app-button" onclick="abrirSeccionMusica()">Ir a Sección de Música</button>
+
+        <!-- Imagen de carga -->
+        <div class="loading">
+            <img src="img/loading.gif" alt="Cargando">
+        </div>
+    </div>
+
+    <!-- Texto en la parte inferior -->
+    <footer class="footer">
+        <p>Copyright © 2024 RADIO POWER.</p>
+        <p>radiopowercolombia@gmail.com</p>
+    </footer>
+
+    <script>
+        function abrirSeccionMusica() {
+            // Función para abrir la sección de música de la app
+            // Cambia este enlace por el correcto que funcione en App Creator 24
+            window.location.href = 'app://seccionMusica'; // Este es solo un ejemplo, ajusta según sea necesario
+        }
+    </script>
+</body>
+</html>
