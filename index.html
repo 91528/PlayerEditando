@@ -1,162 +1,303 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8"> 
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página Responsiva con Imágenes como Botones</title>
+    <title>Reproductor de Radio Online</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue:wght@400;700&display=swap">
     <style>
-        /* CSS integrado */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            min-height: 100vh;
-            background-image: url('img/fondo.jpg'); /* Ruta de la imagen de fondo */
-            background-size: contain;
-            background-position: center center;
-            background-repeat: no-repeat;
-        }
-
-        .logo {
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        .logo img {
-            max-width: 100%;
-            height: auto;
-        }
-
-        .container {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            flex-grow: 1;
+            height: 100vh;
+            background: radial-gradient(circle, black, #1162ac);
+            margin: 0;
             padding: 20px;
+            box-sizing: border-box;
         }
 
-        .buttons {
+        .radio-player {
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            width: 100%;
-            max-width: 180px;
-        }
-
-        .button-image {
-            width: 100%;
-            height: auto;
-            transition: transform 0.3s;
-        }
-
-        .button-image:hover {
-            transform: scale(1.05);
-        }
-
-        .loading {
-            margin-top: 20px;
-        }
-
-        .loading img {
+            align-items: center;
+            justify-content: center;
             max-width: 100%;
+        }
+
+        .logo {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: 4px solid #fff;
+            background: url('https://i.imgur.com/2UvbNih.png') no-repeat center center;
+            background-size: cover;
+            position: relative;
+            margin-bottom: 20px;
+            animation: spin 10s linear infinite; /* Animación de giro constante */
+        }
+
+        .logo.active::before,
+        .logo.active::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 240px;
+            height: 240px;
+            border-radius: 50%;
+            border: 2px solid;
+            animation: pulse 2s infinite ease-in-out, colorChangeAcid 4s infinite;
+        }
+
+        .logo.active::before {
+            border-color: rgba(255, 0, 255, 0.5);
+            animation-delay: 0s;
+        }
+
+        .logo.active::after {
+            border-color: rgba(0, 255, 255, 0.8);
+            animation-delay: 1s;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        @keyframes colorChangeAcid {
+            0% { border-color: rgba(255, 0, 255, 0.5); }
+            20% { border-color: rgba(0, 255, 255, 0.5); }
+            40% { border-color: rgba(0, 255, 0, 0.5); }
+            60% { border-color: rgba(255, 165, 0, 0.5); }
+            80% { border-color: rgba(138, 43, 226, 0.5); }
+            100% { border-color: rgba(255, 0, 255, 0.5); }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-gif {
+            margin-top: 15px;
+            width: 100px;
             height: auto;
         }
 
-        .footer {
-            background-color: rgba(0, 0, 0, 0.5);
-            color: white;
-            width: 100%;
+        .tagline {
+            margin-top: 15px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 18px;
+            color: #fff;
             text-align: center;
-            padding: 10px 0;
-            font-size: 14px;
+            overflow: hidden;
+            white-space: nowrap;
             position: relative;
+            width: 100%;
+            height: 24px;
+        }
+
+        .tagline span {
+            position: absolute;
+            white-space: nowrap;
+            animation: marquee 10s linear infinite;
+            font-family: 'Bebas Neue', sans-serif;
+            color: #fff;
+            font-size: 18px;
+        }
+
+        .controls {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .volume-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .volume-slider {
+            -webkit-appearance: none;
+            width: 200px;
+            height: 8px;
+            background: #555;
+            border-radius: 5px;
+            outline: none;
+            margin: 0 10px;
+            transition: background 0.2s;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #ff0000; /* Cambiar el color del control deslizante a rojo brillante */
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .volume-slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: #ff0000; /* Cambiar el color del control deslizante a rojo brillante */
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .volume-icon {
+            font-size: 24px;
+        }
+
+        .play-pause-btn {
+            background: linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3);
+            background-size: 400% 400%;
+            color: #fff;
+            border: none;
+            font-size: 24px;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            animation: equalizerAnimation 3s infinite;
+            margin-bottom: 15px;
+            outline: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .play-pause-btn:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 150%;
+            height: 150%;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transition: opacity 0.3s;
+        }
+
+        .play-pause-btn:hover {
+            background-color: #cc0000;
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .play-pause-btn:active {
+            transform: scale(0.95);
+        }
+
+        @keyframes equalizerAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 10px;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            color: #fff;
+            text-transform: capitalize;
+            background-color: rgba(0, 0, 0, 0.6);
+            width: 100%;
+            position: fixed;
             bottom: 0;
         }
 
-        @media (max-width: 480px) {
-            .buttons {
-                gap: 10px;
-                max-width: 150px;
-            }
-
-            .footer {
-                font-size: 12px;
-            }
-
-            body {
-                background-size: cover;
-            }
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
         }
 
-        /* Estilos para el botón adicional */
-        .app-button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
+        @media (max-width: 600px) {
+            .logo {
+                width: 144px;
+                height: 144px;
+                border: 3px solid #fff;
+            }
 
-        .app-button:hover {
-            background-color: #0056b3;
+            .play-pause-btn {
+                padding: 10px;
+                font-size: 20px;
+            }
+
+            .volume-slider {
+                width: 150px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Logo de la marca -->
-    <div class="logo">
-        <img src="https://i.imgur.com/gQYREid.png" alt="Logo de la Marca">
-    </div>
-
-    <div class="container">
-        <!-- Imágenes como botones -->
-        <div class="buttons">
-            <a href="https://radiopowercolombia.blogspot.com/">
-                <img src="img/imagen1.png" alt="Enlace 1" class="button-image">
-            </a>
-            <a href="https://radiopower-urbana.blogspot.com/">
-                <img src="img/imagen2.png" alt="Enlace 2" class="button-image">
-            </a>
-            <a href="https://radiopower-salsa.blogspot.com/">
-                <img src="img/imagen3.png" alt="Enlace 3" class="button-image">
-            </a>
-            <a href="https://radiopower-web.blogspot.com/">
-                <img src="img/imagen4.png" alt="Enlace 4" class="button-image">
-            </a>
+    <div class="radio-player">
+        <!-- Logo con ondas sonoras alrededor -->
+        <div class="logo" id="logo"></div>
+        <img src="https://i.imgur.com/FIFbfGV.gif" alt="Cargando" class="loading-gif">
+        <div class="tagline">
+            <span>Con el poder de los clásicos</span>
         </div>
-
-        <!-- Botón para abrir la sección "Audio" de la app -->
-        <button class="app-button" onclick="abrirSeccionAudio()">Ir a Sección de Audio</button>
-
-        <!-- Imagen de carga -->
-        <div class="loading">
-            <img src="img/loading.gif" alt="Cargando">
+        <div class="controls">
+            <div class="volume-container">
+                <span class="volume-icon">🔉</span>
+                <input type="range" id="volumeSlider" class="volume-slider" min="0" max="1" step="0.01" value="1" onchange="setVolume(this.value)">
+                <span class="volume-icon">🔊</span>
+            </div>
+            <button class="play-pause-btn" id="playPauseBtn" onclick="togglePlayPause()">▶️</button>
         </div>
     </div>
-
-    <!-- Texto en la parte inferior -->
-    <footer class="footer">
-        <p>Copyright © 2024 RADIO POWER.</p>
-        <p>radiopowercolombia@gmail.com</p>
+    <footer>
+        &copy; 2024 Radio Power.
     </footer>
-
+    <audio id="radio" src="https://stream.zeno.fm/dlvtl3hthyxvv" autoplay></audio>
     <script>
-        function abrirSeccionAudio() {
-            // Función para abrir la sección "Audio" de la app en AppCreator24
-            window.location.href = 'app://Audio'; // Enlace directo a la sección "Audio"
+        const radio = document.getElementById('radio');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const logo = document.getElementById('logo');
+
+        function updateVolumeColor(value) {
+            const volume = parseFloat(value);
+            const red = Math.round(255 * volume);
+            const color = `rgb(${red}, 0, 0)`; // Cambiar a rojo brillante
+
+            volumeSlider.style.background = `linear-gradient(to right, ${color} ${value * 100}%, #555 ${value * 100}%, #555 100%)`;
         }
+
+        function togglePlayPause() {
+            if (radio.paused) {
+                radio.play();
+                playPauseBtn.textContent = '⏸️';
+                logo.classList.add('active'); // Iniciar animación
+            } else {
+                radio.pause();
+                playPauseBtn.textContent = '▶️';
+                logo.classList.remove('active'); // Detener animación
+            }
+        }
+
+        function setVolume(value) {
+            radio.volume = value;
+            updateVolumeColor(value);
+        }
+
+        setVolume(volumeSlider.value);
+        radio.play().catch(error => {
+            console.log('Autoplay blocked by browser:', error);
+        });
     </script>
 </body>
 </html>
