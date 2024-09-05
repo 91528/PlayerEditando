@@ -35,7 +35,7 @@
             background-size: cover;
             position: relative;
             margin-bottom: 20px;
-            animation: spin 10s linear infinite; /* Animación de giro constante */
+            animation: spin 10s linear infinite;
         }
 
         .logo.active::before,
@@ -63,14 +63,8 @@
         }
 
         @keyframes pulse {
-            0% {
-                transform: translate(-50%, -50%) scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: translate(-50%, -50%) scale(1.5);
-                opacity: 0;
-            }
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; }
         }
 
         @keyframes colorChangeAcid {
@@ -141,7 +135,7 @@
             -webkit-appearance: none;
             width: 20px;
             height: 20px;
-            background: #ff0000; /* Cambiar el color del control deslizante a rojo brillante */
+            background: #ff0000;
             border-radius: 50%;
             cursor: pointer;
         }
@@ -149,7 +143,7 @@
         .volume-slider::-moz-range-thumb {
             width: 20px;
             height: 20px;
-            background: #ff0000; /* Cambiar el color del control deslizante a rojo brillante */
+            background: #ff0000;
             border-radius: 50%;
             cursor: pointer;
         }
@@ -244,7 +238,6 @@
 </head>
 <body>
     <div class="radio-player">
-        <!-- Logo con ondas sonoras alrededor -->
         <div class="logo" id="logo"></div>
         <img src="https://i.imgur.com/FIFbfGV.gif" alt="Cargando" class="loading-gif">
         <div class="tagline">
@@ -293,6 +286,20 @@
             radio.volume = value;
             updateVolumeColor(value);
         }
+
+        radio.addEventListener('play', () => {
+            playPauseBtn.textContent = '⏸️';
+            logo.classList.add('active');
+        });
+
+        radio.addEventListener('pause', () => {
+            playPauseBtn.textContent = '▶️';
+            logo.classList.remove('active');
+        });
+
+        radio.addEventListener('error', () => {
+            alert('No se pudo reproducir la radio. Por favor, verifica tu conexión a Internet o intenta de nuevo más tarde.');
+        });
 
         setVolume(volumeSlider.value);
         radio.play().catch(error => {
